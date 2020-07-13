@@ -7,12 +7,12 @@ namespace dotnet3._1_in_docker.Models
 {
     public class AppErrorResponse
     {
-        public string Status { get; set; }
-        public string Reason { get; set; }
+        public string status { get; set; }
+        public string reason { get; set; }
     }
     public class AppSuccessResponse
     {
-        public string Status { get; set; }
+        public string status { get; set; }
     }
     public class PendingRequest
     {
@@ -32,6 +32,6 @@ namespace dotnet3._1_in_docker.Models
     }
     public class CreateUser
     {
-        public string UserName { get; set; }
+        public string username { get; set; }
     }
 }

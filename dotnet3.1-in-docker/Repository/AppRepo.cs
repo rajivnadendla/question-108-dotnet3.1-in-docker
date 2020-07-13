@@ -16,10 +16,10 @@ namespace dotnet3._1_in_docker.Repository
                 // Get a context
                 using (var context = factory.CreateContext())
                 {
-                    var u = context.Users.FirstOrDefault(user => user.UserName == createUser.UserName);
+                    var u = context.Users.FirstOrDefault(user => user.UserName == createUser.username);
                     if (u == null)
                     {
-                        var user = new User() { UserName = createUser.UserName };
+                        var user = new User() { UserName = createUser.username };
                         FriendRequest friend = new FriendRequest();
                         friend.Users = user;
                         friend.TotalFriends = 0;

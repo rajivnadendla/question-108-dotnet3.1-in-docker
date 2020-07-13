@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace dotnet3._1_in_docker.Controllers
 {
-    [Route("[controller]")]
+    //[Route("[controller]")]
     [ApiController]
     public class AppController : ControllerBase
     {
@@ -34,12 +34,12 @@ namespace dotnet3._1_in_docker.Controllers
                 if (_repo.CreateAppUser(user) == 1)
                     return Created("User Created", user);
                 else
-                    return BadRequest(new AppErrorResponse { Status="failure",Reason="User exists with the same name"});
+                    return BadRequest(new AppErrorResponse { status="failure",reason="User exists with the same name"});
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message, ex.InnerException);
-                return BadRequest(new AppErrorResponse { Status = "failure", Reason = "User exists with the same name" });
+                return BadRequest(new AppErrorResponse { status = "failure", reason = "User exists with the same name" });
             }
         }
         [Route("add/{userA}/{userB}")]
@@ -51,13 +51,13 @@ namespace dotnet3._1_in_docker.Controllers
                 switch (_repo.AddFriend(userA,userB))
                 {
                     case 0:
-                        return BadRequest(new AppErrorResponse { Status = "failure", Reason = "User does not exists" });
+                        return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exists" });
                     case 1:
-                        return Accepted(new AppSuccessResponse { Status = "success" });
+                        return Accepted(new AppSuccessResponse { status = "success" });
                     case 2:
-                        return BadRequest(new AppErrorResponse { Status = "failure", Reason = "User does not exists" });
+                        return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exists" });
                     default:
-                        return BadRequest(new AppErrorResponse { Status = "failure", Reason = "User does not exists" });
+                        return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exists" });
                 }
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace dotnet3._1_in_docker.Controllers
             {
                 PendingRequest pending = _repo.GetPendingRequests(user);
                 if (pending.Friend_Requests == null || pending.Friend_Requests.Count()==0)
-                    return NotFound(new AppErrorResponse { Status = "failure", Reason = "User does not have any requests" });
+                    return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any requests" });
                 else
                     return Ok(pending);
             }
@@ -92,7 +92,7 @@ namespace dotnet3._1_in_docker.Controllers
             {
                 AllFriends all = _repo.GetAllFriends(user);
                 if (all.Friends == null || all.Friends.Count() == 0)
-                    return NotFound(new AppErrorResponse { Status = "failure", Reason = "User does not have any friends" });
+                    return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any friends" });
                 else
                 {
                     all.Friends = all.Friends.Distinct().ToList();
@@ -113,7 +113,7 @@ namespace dotnet3._1_in_docker.Controllers
             {
                 FriendSuggestion suggestion = _repo.GetFriendSuggestions(user);
                 if (suggestion.Suggestions == null || suggestion.Suggestions.Count() == 0)
-                    return NotFound(new AppErrorResponse { Status = "failure", Reason = "User does not have any friends" });
+                    return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any friends" });
                 else
                 {
                     suggestion.Suggestions.Remove(user);

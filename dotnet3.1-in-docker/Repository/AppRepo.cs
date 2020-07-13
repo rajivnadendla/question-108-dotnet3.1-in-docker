@@ -86,6 +86,7 @@ namespace dotnet3._1_in_docker.Repository
         public PendingRequest GetPendingRequests(string user)
         {
             PendingRequest pending = new PendingRequest();
+            pending.Friend_Requests = new List<string>();
             using (var factory = new FriendSuggestorContextFactory())
             {
                 // Get a context
@@ -98,6 +99,8 @@ namespace dotnet3._1_in_docker.Repository
                                                    on l.UserF equals r.UserId
                                                    where l.UserSF == u.UserId && l.IsFriend == false
                                                    select r.UserName).ToList();
+                    else
+                        pending.Friend_Requests = null;
                 }
             }
             return pending;
@@ -105,6 +108,7 @@ namespace dotnet3._1_in_docker.Repository
         public AllFriends GetAllFriends(string user)
         {
             AllFriends all = new AllFriends();
+            all.Friends = new List<string>();
             using (var factory = new FriendSuggestorContextFactory())
             {
                 // Get a context
@@ -128,6 +132,8 @@ namespace dotnet3._1_in_docker.Repository
                         if (u2.Count > 0)
                             all.Friends.AddRange(u2);
                     }
+                    else
+                        all.Friends = null;
 
                 }
             }
@@ -136,9 +142,13 @@ namespace dotnet3._1_in_docker.Repository
         public FriendSuggestion GetFriendSuggestions(string user)
         {
             FriendSuggestion suggestion = new FriendSuggestion();
-            AllFriends all = GetAllFriends(user);
-            
             suggestion.Suggestions = new List<string>();
+            AllFriends all = GetAllFriends(user);
+            if (all.Friends == null)
+            {
+                suggestion.Suggestions = null;
+                return suggestion;
+            }          
             foreach (var friend1 in all.Friends)
             {
                 var l1 = GetAllFriends(friend1);

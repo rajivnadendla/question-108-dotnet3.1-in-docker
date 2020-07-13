@@ -34,7 +34,7 @@ namespace dotnet3._1_in_docker.Controllers
                 if (_repo.CreateAppUser(user) == 1)
                     return Created("User Created", user);
                 else
-                    return BadRequest(new AppErrorResponse { status="failure",reason="User exists with the same name"});
+                    return BadRequest(new AppErrorResponse { status = "failure", reason = "User exists with the same name" });
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace dotnet3._1_in_docker.Controllers
         {
             try
             {
-                switch (_repo.AddFriend(userA,userB))
+                switch (_repo.AddFriend(userA, userB))
                 {
                     case 0:
                         return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exists" });
@@ -73,7 +73,9 @@ namespace dotnet3._1_in_docker.Controllers
             try
             {
                 PendingRequest pending = _repo.GetPendingRequests(user);
-                if (pending.Friend_Requests == null || pending.Friend_Requests.Count()==0)
+                if (pending.Friend_Requests == null)
+                    return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exist" });
+                else if (pending.Friend_Requests.Count() == 0)
                     return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any requests" });
                 else
                     return Ok(pending);
@@ -91,7 +93,9 @@ namespace dotnet3._1_in_docker.Controllers
             try
             {
                 AllFriends all = _repo.GetAllFriends(user);
-                if (all.Friends == null || all.Friends.Count() == 0)
+                if (all.Friends == null)
+                    return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exist" });
+                else if (all.Friends.Count() == 0)
                     return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any friends" });
                 else
                 {
@@ -112,7 +116,9 @@ namespace dotnet3._1_in_docker.Controllers
             try
             {
                 FriendSuggestion suggestion = _repo.GetFriendSuggestions(user);
-                if (suggestion.Suggestions == null || suggestion.Suggestions.Count() == 0)
+                if (suggestion.Suggestions == null)
+                    return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exist" });
+                else if (suggestion.Suggestions.Count() == 0)
                     return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any friends" });
                 else
                 {

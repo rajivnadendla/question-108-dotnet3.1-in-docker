@@ -86,7 +86,7 @@ namespace dotnet3._1_in_docker.Repository
         public PendingRequest GetPendingRequests(string user)
         {
             PendingRequest pending = new PendingRequest();
-            pending.Friend_Requests = new List<string>();
+            pending.friend_requests = new List<string>();
             using (var factory = new FriendSuggestorContextFactory())
             {
                 // Get a context
@@ -94,13 +94,13 @@ namespace dotnet3._1_in_docker.Repository
                 {
                     User u = context.Users.Where(x => x.UserName == user).FirstOrDefault();
                     if (u != null)
-                        pending.Friend_Requests = (from l in context.FriendsLists
+                        pending.friend_requests = (from l in context.FriendsLists
                                                    join r in context.Users
                                                    on l.UserF equals r.UserId
                                                    where l.UserSF == u.UserId && l.IsFriend == false
                                                    select r.UserName).ToList();
                     else
-                        pending.Friend_Requests = null;
+                        pending.friend_requests = null;
                 }
             }
             return pending;
@@ -108,7 +108,7 @@ namespace dotnet3._1_in_docker.Repository
         public AllFriends GetAllFriends(string user)
         {
             AllFriends all = new AllFriends();
-            all.Friends = new List<string>();
+            all.friends = new List<string>();
             using (var factory = new FriendSuggestorContextFactory())
             {
                 // Get a context
@@ -123,17 +123,17 @@ namespace dotnet3._1_in_docker.Repository
                                   where l.UserSF == u.UserId && l.IsFriend == true
                                   select r.UserName).Distinct().ToList();
                         if (u1.Count > 0)
-                            all.Friends.AddRange(u1);
+                            all.friends.AddRange(u1);
                         var u2 = (from l in context.FriendsLists
                                   join r in context.Users
                                   on l.UserSF equals r.UserId
                                   where l.UserF == u.UserId && l.IsFriend == true
                                   select r.UserName).Distinct().ToList();
                         if (u2.Count > 0)
-                            all.Friends.AddRange(u2);
+                            all.friends.AddRange(u2);
                     }
                     else
-                        all.Friends = null;
+                        all.friends = null;
 
                 }
             }
@@ -142,26 +142,26 @@ namespace dotnet3._1_in_docker.Repository
         public FriendSuggestion GetFriendSuggestions(string user)
         {
             FriendSuggestion suggestion = new FriendSuggestion();
-            suggestion.Suggestions = new List<string>();
+            suggestion.suggestions = new List<string>();
             AllFriends all = GetAllFriends(user);
-            if (all.Friends == null)
+            if (all.friends == null)
             {
-                suggestion.Suggestions = null;
+                suggestion.suggestions = null;
                 return suggestion;
             }          
-            foreach (var friend1 in all.Friends)
+            foreach (var friend1 in all.friends)
             {
                 var l1 = GetAllFriends(friend1);
-                l1.Friends.Remove(user);
-                if (l1.Friends.Count > 0)
+                l1.friends.Remove(user);
+                if (l1.friends.Count > 0)
                 {
-                    suggestion.Suggestions.AddRange(l1.Friends.Except(all.Friends));
-                    foreach (var friend2 in l1.Friends)
+                    suggestion.suggestions.AddRange(l1.friends.Except(all.friends));
+                    foreach (var friend2 in l1.friends)
                     {
                         var l2 = GetAllFriends(friend2);
-                        l2.Friends.Remove(user);
-                        if (l2.Friends.Count > 0)
-                            suggestion.Suggestions.AddRange(l2.Friends.Except(all.Friends));
+                        l2.friends.Remove(user);
+                        if (l2.friends.Count > 0)
+                            suggestion.suggestions.AddRange(l2.friends.Except(all.friends));
                     }
                 }
             }

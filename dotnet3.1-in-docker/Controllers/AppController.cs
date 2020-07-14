@@ -73,9 +73,9 @@ namespace dotnet3._1_in_docker.Controllers
             try
             {
                 PendingRequest pending = _repo.GetPendingRequests(user);
-                if (pending.Friend_Requests == null)
+                if (pending.friend_requests == null)
                     return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exist" });
-                else if (pending.Friend_Requests.Count() == 0)
+                else if (pending.friend_requests.Count() == 0)
                     return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any requests" });
                 else
                     return Ok(pending);
@@ -93,13 +93,13 @@ namespace dotnet3._1_in_docker.Controllers
             try
             {
                 AllFriends all = _repo.GetAllFriends(user);
-                if (all.Friends == null)
+                if (all.friends == null)
                     return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exist" });
-                else if (all.Friends.Count() == 0)
+                else if (all.friends.Count() == 0)
                     return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any friends" });
                 else
                 {
-                    all.Friends = all.Friends.Distinct().ToList();
+                    all.friends = all.friends.Distinct().ToList();
                     return Ok(all);
                 }
             }
@@ -116,14 +116,14 @@ namespace dotnet3._1_in_docker.Controllers
             try
             {
                 FriendSuggestion suggestion = _repo.GetFriendSuggestions(user);
-                if (suggestion.Suggestions == null)
+                if (suggestion.suggestions == null)
                     return BadRequest(new AppErrorResponse { status = "failure", reason = "User does not exist" });
-                else if (suggestion.Suggestions.Count() == 0)
+                else if (suggestion.suggestions.Count() == 0)
                     return NotFound(new AppErrorResponse { status = "failure", reason = "User does not have any friends" });
                 else
                 {
-                    suggestion.Suggestions.Remove(user);
-                    suggestion.Suggestions = suggestion.Suggestions.Distinct().ToList();
+                    suggestion.suggestions.Remove(user);
+                    suggestion.suggestions = suggestion.suggestions.Distinct().ToList();
                     return Ok(suggestion);
                 }
             }

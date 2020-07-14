@@ -16,19 +16,19 @@ namespace dotnet3._1_in_docker.Models
     }
     public class PendingRequest
     {
-        public List<string> Friend_Requests { get; set; }
+        public List<string> friend_requests { get; set; }
     }
     public class AllFriends
     {
         public AllFriends()
         {
-            this.Friends = new List<string>();
+            this.friends = new List<string>();
         }
-        public List<string> Friends { get; set; }
+        public List<string> friends { get; set; }
     }
     public class FriendSuggestion
     {
-        public List<string> Suggestions { get; set; }
+        public List<string> suggestions { get; set; }
     }
     public class CreateUser
     {
